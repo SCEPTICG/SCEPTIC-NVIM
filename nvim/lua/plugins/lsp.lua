@@ -1,32 +1,44 @@
 return {
-    "neovim/nvim-lspconfig",
+  {
+    "mason-org/mason.nvim",
+    cmd = "Mason",
+    opts = {},
+  },
+  {
+    "mason-org/mason-lspconfig.nvim",
     dependencies = {
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "hrsh7th/cmp-nvim-lsp",
+      "mason-org/mason.nvim",
+      "neovim/nvim-lspconfig",
+      "saghen/blink.cmp",
     },
-    config = function()
-        require("mason").setup()
-        local mlp = require("mason-lspconfig")
+    opts = {
+      ensure_installed = { "lua_ls", "pyright", "bashls", "jsonls", "yamlls" },
+      automatic_enable = true,
+    },
+    config = function(_, opts)
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-        -- Aseguramos que se instalen automáticamente
-        mlp.setup({
-            ensure_installed = { "lua_ls", "pyright", "bashls" }
-        })
+      local servers = {
+        pyright = {},
+        bashls = {},
+        jsonls = {},
+        yamlls = {},
+        lua_ls = {
+          settings = {
+            Lua = {
+              diagnostics = { globals = { "vim" } },
+              workspace = { checkThirdParty = false },
+            },
+          },
+        },
+      }
 
-        local capabilities = require('cmp_nvim_lsp').default_capabilities()
-        local lspconfig = require("lspconfig")
+      for server, config in pairs(servers) do
+        config.capabilities = capabilities
+        vim.lsp.config(server, config)
+      end
 
-        -- Python
-        lspconfig.pyright.setup({ capabilities = capabilities })
-
-        -- Bash
-        lspconfig.bashls.setup({ capabilities = capabilities })
-
-        -- Lua (para tu propia config)
-        lspconfig.lua_ls.setup({
-            capabilities = capabilities,
-            settings = { Lua = { diagnostics = { globals = { "vim" } } } }
-        })
-    end
+      require("mason-lspconfig").setup(opts)
+    end,
+  },
 }
