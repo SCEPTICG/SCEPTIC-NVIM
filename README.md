@@ -18,6 +18,34 @@ depender del resto del proyecto.
 Antes de instalar, haz copia de seguridad de una configuración anterior si ya
 existe.
 
+### Un comando
+
+Windows PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/SCEPTICG/SCEPTIC-NVIM/main/install.ps1 | iex
+```
+
+Linux/macOS:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/SCEPTICG/SCEPTIC-NVIM/main/install.sh | sh
+```
+
+Para probar una rama concreta antes de mezclarla en `main`, define `SCEPTIC_NVIM_BRANCH`.
+
+PowerShell:
+
+```powershell
+$env:SCEPTIC_NVIM_BRANCH = "codex/modern-cross-platform-nvim"; irm https://raw.githubusercontent.com/SCEPTICG/SCEPTIC-NVIM/codex/modern-cross-platform-nvim/install.ps1 | iex
+```
+
+Bash/Zsh:
+
+```bash
+SCEPTIC_NVIM_BRANCH=codex/modern-cross-platform-nvim sh -c "$(curl -fsSL https://raw.githubusercontent.com/SCEPTICG/SCEPTIC-NVIM/codex/modern-cross-platform-nvim/install.sh)"
+```
+
 ### Windows PowerShell
 
 ```powershell
