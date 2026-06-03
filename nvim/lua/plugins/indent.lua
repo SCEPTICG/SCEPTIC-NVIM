@@ -1,20 +1,14 @@
 return {
+  {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
+    event = { "BufReadPost", "BufNewFile" },
     opts = {
-        indent = { char = "▎" },
-        scope = { enabled = true, show_start = true },
-        -- Añade esta sección para excluir el Dashboard y otras ventanas
-        exclude = {
-            filetypes = {
-                "dashboard",
-                "help",
-                "terminal",
-                "lazy",
-                "mason",
-                "notify",
-                "toggleterm",
-            },
-        },
+      indent = { char = "|" },
+      scope = { enabled = true },
+      exclude = {
+        filetypes = { "dashboard", "help", "terminal", "lazy", "mason", "toggleterm" },
+      },
     },
+  },
 }

@@ -1,5 +1,7 @@
 return {
-    'numToStr/Comment.nvim',
+  {
+    "numToStr/Comment.nvim",
+    keys = { "gc", "gb" },
     opts = {},
-    lazy = false,
+  },
 }
