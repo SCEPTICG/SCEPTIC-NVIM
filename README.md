@@ -1,5 +1,7 @@
 # SCEPTIC-NVIM
 
+[![CI](https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml/badge.svg)](https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml)
+
 Configuración moderna y standalone de Neovim para Windows, Linux y macOS.
 El repositorio mantiene la configuración instalable dentro de `nvim/`, de forma
 que se pueda copiar o enlazar al directorio de configuración de Neovim sin
@@ -98,6 +100,9 @@ Después, revisa el estado de plugins, herramientas externas y salud general:
 Los servidores LSP y los formateadores (stylua, black, prettier, beautysh) se instalan
 solos vía `mason-lspconfig` y `mason-tool-installer`. Los parsers de Treesitter se
 instalan con `:TSInstall <lenguaje>`.
+
+Integra `gitsigns` (cambios de Git en el margen y atajos `]h`/`[h`, `<leader>h*`) y
+`which-key`, que muestra un menú con los atajos disponibles al pulsar la tecla líder.
 
 ## Estructura
 

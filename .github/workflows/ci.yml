@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lua lint (stylua + luacheck)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: stylua --check
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check nvim/
+
+      - name: Install luacheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luarocks
+          sudo luarocks install luacheck
+
+      - name: luacheck
+        run: luacheck nvim/lua
+
+  load:
+    name: Headless load test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Neovim (stable)
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Install plugins and check the config loads
+        run: |
+          set -euo pipefail
+          # Usar la config del repo como si fuera ~/.config/nvim
+          export XDG_CONFIG_HOME="$GITHUB_WORKSPACE/.ci-config"
+          export XDG_DATA_HOME="$GITHUB_WORKSPACE/.ci-data"
+          mkdir -p "$XDG_CONFIG_HOME" "$XDG_DATA_HOME"
+          ln -sfn "$GITHUB_WORKSPACE/nvim" "$XDG_CONFIG_HOME/nvim"
+
+          # 1) Instalar plugins (bloqueante)
+          nvim --headless "+Lazy! sync" +qa
+
+          # 2) Abrir un archivo real para disparar los plugins por evento
+          #    (treesitter, conform, gitsigns...) y fallar si algo imprime error.
+          printf 'local x = 1\nprint(x)\n' > sample.lua
+          err="$(nvim --headless sample.lua '+qa' 2>&1 || true)"
+          if [ -n "$err" ]; then
+            echo "El arranque de Neovim produjo errores:"
+            echo "$err"
+            exit 1
+          fi
+          echo "La config carga sin errores."
