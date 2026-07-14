@@ -1,5 +1,6 @@
 return {
     'nvimdev/lspsaga.nvim',
+    event = "LspAttach",
     dependencies = {
         'nvim-treesitter/nvim-treesitter', -- Para resaltar la estructura
         'nvim-tree/nvim-web-devicons'      -- Para los iconos
@@ -26,6 +27,5 @@ return {
         local keymap = vim.keymap
         keymap.set("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", { desc = "LSP Finder" })
         keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { desc = "Documentación flotante" })
-        keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "Acciones de código" })
     end
 }

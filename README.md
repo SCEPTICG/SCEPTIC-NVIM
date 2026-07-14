@@ -95,13 +95,14 @@ Después, revisa el estado de plugins, herramientas externas y salud general:
 :checkhealth
 ```
 
-Si algún servidor LSP, parser de Treesitter o formateador no está disponible,
-instálalo desde `:Mason` o con el gestor de paquetes de tu sistema.
+Los servidores LSP y los formateadores (stylua, black, prettier, beautysh) se instalan
+solos vía `mason-lspconfig` y `mason-tool-installer`. Los parsers de Treesitter se
+instalan con `:TSInstall <lenguaje>`.
 
 ## Estructura
 
 - `nvim/init.lua`: entrypoint mínimo de la configuración.
-- `nvim/lua/sceptic/`: opciones, keymaps, autocmds, utilidades y bootstrap de Lazy.
+- `nvim/lua/sceptic/`: opciones, keymaps, autocmds y bootstrap de Lazy.
 - `nvim/lua/plugins/`: specs enfocadas de plugins para `lazy.nvim`.
 - `nvim/lazy-lock.json`: lockfile generado por `lazy.nvim` para fijar versiones.
 - `docs/superpowers/plans/`: planes de trabajo y revision estatica del proyecto.

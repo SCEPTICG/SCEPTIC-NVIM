@@ -3,7 +3,7 @@ local group = vim.api.nvim_create_augroup("sceptic", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = group,
   callback = function()
-    vim.highlight.on_yank({ timeout = 150 })
+    vim.hl.on_yank({ timeout = 150 })
   end,
 })
 
@@ -31,7 +31,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("gi", vim.lsp.buf.implementation, "Ir a implementacion")
     map("<leader>rn", vim.lsp.buf.rename, "Renombrar simbolo")
     map("<leader>ca", vim.lsp.buf.code_action, "Acciones de codigo")
-    map("[d", vim.diagnostic.goto_prev, "Diagnostico anterior")
-    map("]d", vim.diagnostic.goto_next, "Diagnostico siguiente")
+    map("[d", function() vim.diagnostic.jump({ count = -1 }) end, "Diagnostico anterior")
+    map("]d", function() vim.diagnostic.jump({ count = 1 }) end, "Diagnostico siguiente")
   end,
 })
