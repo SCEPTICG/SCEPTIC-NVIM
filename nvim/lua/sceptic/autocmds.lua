@@ -31,7 +31,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("gi", vim.lsp.buf.implementation, "Ir a implementacion")
     map("<leader>rn", vim.lsp.buf.rename, "Renombrar simbolo")
     map("<leader>ca", vim.lsp.buf.code_action, "Acciones de codigo")
-    map("[d", function() vim.diagnostic.jump({ count = -1 }) end, "Diagnostico anterior")
-    map("]d", function() vim.diagnostic.jump({ count = 1 }) end, "Diagnostico siguiente")
+    map("[d", function()
+      vim.diagnostic.jump({ count = -1 })
+    end, "Diagnostico anterior")
+    map("]d", function()
+      vim.diagnostic.jump({ count = 1 })
+    end, "Diagnostico siguiente")
   end,
 })

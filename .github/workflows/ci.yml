@@ -20,7 +20,7 @@ jobs:
         uses: JohnnyMorganz/stylua-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          version: latest
+          version: 2.0.2
           args: --check nvim/
 
       - name: Install luacheck

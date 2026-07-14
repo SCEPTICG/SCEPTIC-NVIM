@@ -17,14 +17,20 @@ return {
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
         end
 
-        -- Navegar entre cambios (hunks)
-        map("n", "]h", gs.next_hunk, "Siguiente cambio de Git")
-        map("n", "[h", gs.prev_hunk, "Cambio de Git anterior")
-        -- Acciones sobre cambios
-        map("n", "<leader>hs", gs.stage_hunk, "Stage del cambio")
-        map("n", "<leader>hr", gs.reset_hunk, "Descartar el cambio")
-        map("n", "<leader>hp", gs.preview_hunk, "Previsualizar el cambio")
-        map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, "Blame de la linea")
+        -- Navegar entre cambios (hunks). nav_hunk es la API estable actual.
+        map("n", "]h", function()
+          gs.nav_hunk("next")
+        end, "Siguiente cambio de Git")
+        map("n", "[h", function()
+          gs.nav_hunk("prev")
+        end, "Cambio de Git anterior")
+        -- Acciones sobre cambios (prefijo <leader>g para no chocar con <leader>h = nohlsearch)
+        map("n", "<leader>gs", gs.stage_hunk, "Stage del cambio")
+        map("n", "<leader>gr", gs.reset_hunk, "Descartar el cambio")
+        map("n", "<leader>gp", gs.preview_hunk, "Previsualizar el cambio")
+        map("n", "<leader>gb", function()
+          gs.blame_line({ full = true })
+        end, "Blame de la linea")
       end,
     },
   },

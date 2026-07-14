@@ -101,7 +101,7 @@ Los servidores LSP y los formateadores (stylua, black, prettier, beautysh) se in
 solos vía `mason-lspconfig` y `mason-tool-installer`. Los parsers de Treesitter se
 instalan con `:TSInstall <lenguaje>`.
 
-Integra `gitsigns` (cambios de Git en el margen y atajos `]h`/`[h`, `<leader>h*`) y
+Integra `gitsigns` (cambios de Git en el margen y atajos `]h`/`[h`, `<leader>g*`) y
 `which-key`, que muestra un menú con los atajos disponibles al pulsar la tecla líder.
 
 ## Estructura
