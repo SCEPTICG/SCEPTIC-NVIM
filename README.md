@@ -1,96 +1,29 @@
-<div align="center">
+# SCEPTIC-NVIM
 
-# 💤 SCEPTIC-NVIM
+A standalone, cross-platform Neovim configuration built on [lazy.nvim](https://github.com/folke/lazy.nvim). The whole config lives under `nvim/`, so you can copy or symlink it straight into your Neovim config directory.
 
-A modern, standalone Neovim config for Windows, Linux and macOS, built on top of [lazy.nvim](https://github.com/folke/lazy.nvim).
+Works the same on Linux, macOS and Windows, and targets Neovim >= 0.11.3.
 
-<!-- Add a screenshot here once you have one: place screenshot.png in the repo root and uncomment:
-<img src="screenshot.png" alt="SCEPTIC-NVIM screenshot" width="800" /> -->
-
-</div>
-
-<p align="center">
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Installation">Installation</a> •
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Keymaps">Keymaps</a> •
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki">Docs</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/SCEPTICG/SCEPTIC-NVIM/ci.yml?branch=main&style=for-the-badge" /></a>
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/SCEPTICG/SCEPTIC-NVIM?style=for-the-badge" /></a>
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/SCEPTICG/SCEPTIC-NVIM?style=for-the-badge" /></a>
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/SCEPTICG/SCEPTIC-NVIM?style=for-the-badge" /></a>
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM/issues"><img alt="Issues" src="https://img.shields.io/github/issues/SCEPTICG/SCEPTIC-NVIM?style=for-the-badge" /></a>
-  <a href="https://github.com/SCEPTICG/SCEPTIC-NVIM"><img alt="Repo size" src="https://img.shields.io/github/repo-size/SCEPTICG/SCEPTIC-NVIM?style=for-the-badge" /></a>
-</p>
-
-SCEPTIC-NVIM is a personal, standalone Neovim configuration — not a distribution framework. It lives entirely in the `nvim/` folder, so it drops straight into your Neovim config directory with no extra layer on top. LSP, autocompletion, formatting, file search and git status all work out of the box, and plugin versions are pinned via `lazy-lock.json` for reproducible installs.
-
-## ✨ Features
-
-- 💤 Plugin management via [lazy.nvim](https://github.com/folke/lazy.nvim), with versions pinned in `lazy-lock.json`
-- 🚀 LSP out of the box via `mason.nvim` + `mason-lspconfig`, with completion powered by [blink.cmp](https://github.com/Saghen/blink.cmp)
-- 🌳 Syntax-aware editing with `nvim-treesitter`
-- 🔍 Fuzzy finding for files, text and buffers with `telescope.nvim`
-- 🎨 Auto-format on save with `conform.nvim`, formatters installed automatically via `mason-tool-installer`
-- 🔀 Git status in the sign column and hunk actions with `gitsigns.nvim`
-- ⌨️ On-demand keymap hints with `which-key.nvim`
-- 🎨 Catppuccin (mocha) theme wired into every plugin
-- 🇪🇸 Custom **j/k/l/ñ** movement for ISO Spanish keyboards (`h` is disabled) — see [Keymaps](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Keymaps)
-
-## ⚡️ Requirements
-
-- Neovim >= 0.11.3 (LuaJIT build)
-- Git
-- A [Nerd Font](https://www.nerdfonts.com/), set in your terminal
-- A C compiler, needed by `nvim-treesitter` to build parsers
-- Recommended: `rg` (ripgrep) and `fd` for faster Telescope searches
-
-Formatters (`stylua`, `black`, `prettier`, `beautysh`) and LSP servers are installed automatically by `mason-tool-installer` and `mason-lspconfig` — no manual setup needed.
-
-## 🚀 Getting Started
-
-> [!IMPORTANT]
-> The installers back up any existing config automatically, but if you've customized it, check the backup before wiping it.
-
-**Linux / macOS:**
+## Quick start
 
 ```bash
+# Linux / macOS
 curl -fsSL https://raw.githubusercontent.com/SCEPTICG/SCEPTIC-NVIM/main/install.sh | sh
 ```
 
-**Windows (PowerShell):**
-
 ```powershell
+# Windows PowerShell
 irm https://raw.githubusercontent.com/SCEPTICG/SCEPTIC-NVIM/main/install.ps1 | iex
 ```
 
-<details>
-<summary>Manual installation by OS</summary>
+On first launch, `lazy.nvim` installs every plugin automatically. See the [Installation](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Installation) page for manual steps, requirements and how to test a branch.
 
-See the [Installation](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Installation) wiki page for step-by-step manual instructions on Linux, macOS and Windows, plus how to test a specific branch with `SCEPTIC_NVIM_BRANCH`.
+## Documentation
 
-</details>
+Everything lives in the [wiki](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki):
 
-Then open Neovim and let `lazy.nvim` install the plugins:
-
-```bash
-nvim
-```
-
-## 📂 Structure
-
-```
-nvim/
-├── init.lua              -- entrypoint, requires sceptic
-├── lua/
-│   ├── sceptic/           -- options, keymaps, autocmds, lazy.nvim bootstrap
-│   └── plugins/            -- one spec file per plugin, auto-loaded by lazy.nvim
-└── lazy-lock.json         -- pinned plugin versions
-```
-
-Full breakdown in [Structure](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Structure).
-
-## ⚙️ Docs
-
-Everything else — full keymap tables, plugin list, folder structure and maintenance — lives in the **[wiki](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki)**.
+- [Installation](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Installation) — one-command and manual install, testing a branch, first run.
+- [Keymaps](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Keymaps) — every keybinding, including the custom j/k/l/ñ movement for ISO Spanish keyboards.
+- [Plugins](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Plugins) — what each plugin does.
+- [Structure](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Structure) — folder layout and load order.
+- [Maintenance](https://github.com/SCEPTICG/SCEPTIC-NVIM/wiki/Maintenance) — updating plugins, health checks, CI and rollback.
