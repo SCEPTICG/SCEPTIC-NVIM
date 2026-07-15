@@ -6,6 +6,13 @@ map("n", "<leader>w", "<cmd>write<cr>", "Guardar archivo")
 map("n", "<leader>q", "<cmd>quit<cr>", "Cerrar ventana")
 map("n", "<leader>h", "<cmd>nohlsearch<cr>", "Limpiar resaltado de busqueda")
 
+-- Movimiento con j/k/l/ñ para teclado ISO español; h deshabilitada
+map({ "n", "x", "o" }, "j", "h", "Mover a la izquierda")
+map({ "n", "x", "o" }, "k", "k", "Mover arriba")
+map({ "n", "x", "o" }, "l", "j", "Mover abajo")
+map({ "n", "x", "o" }, "ñ", "l", "Mover a la derecha")
+map({ "n", "x", "o" }, "h", "<Nop>", "Tecla h deshabilitada")
+
 map("n", "<S-l>", "<cmd>bnext<cr>", "Buffer siguiente")
 map("n", "<S-h>", "<cmd>bprevious<cr>", "Buffer anterior")
 

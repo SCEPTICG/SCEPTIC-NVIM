@@ -5,6 +5,13 @@ return {
     opts = {},
   },
   {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "mason-org/mason.nvim" },
+    opts = {
+      ensure_installed = { "stylua", "black", "prettier", "beautysh" },
+    },
+  },
+  {
     "mason-org/mason-lspconfig.nvim",
     dependencies = {
       "mason-org/mason.nvim",

@@ -1,5 +1,7 @@
 # SCEPTIC-NVIM
 
+[![CI](https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml/badge.svg)](https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml)
+
 Configuración moderna y standalone de Neovim para Windows, Linux y macOS.
 El repositorio mantiene la configuración instalable dentro de `nvim/`, de forma
 que se pueda copiar o enlazar al directorio de configuración de Neovim sin
@@ -95,13 +97,17 @@ Después, revisa el estado de plugins, herramientas externas y salud general:
 :checkhealth
 ```
 
-Si algún servidor LSP, parser de Treesitter o formateador no está disponible,
-instálalo desde `:Mason` o con el gestor de paquetes de tu sistema.
+Los servidores LSP y los formateadores (stylua, black, prettier, beautysh) se instalan
+solos vía `mason-lspconfig` y `mason-tool-installer`. Los parsers de Treesitter se
+instalan con `:TSInstall <lenguaje>`.
+
+Integra `gitsigns` (cambios de Git en el margen y atajos `]h`/`[h`, `<leader>g*`) y
+`which-key`, que muestra un menú con los atajos disponibles al pulsar la tecla líder.
 
 ## Estructura
 
 - `nvim/init.lua`: entrypoint mínimo de la configuración.
-- `nvim/lua/sceptic/`: opciones, keymaps, autocmds, utilidades y bootstrap de Lazy.
+- `nvim/lua/sceptic/`: opciones, keymaps, autocmds y bootstrap de Lazy.
 - `nvim/lua/plugins/`: specs enfocadas de plugins para `lazy.nvim`.
 - `nvim/lazy-lock.json`: lockfile generado por `lazy.nvim` para fijar versiones.
 - `docs/superpowers/plans/`: planes de trabajo y revision estatica del proyecto.

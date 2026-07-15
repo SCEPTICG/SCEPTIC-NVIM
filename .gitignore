@@ -1,0 +1,11 @@
+# Basura local del sistema
+.DS_Store
+Thumbs.db
+
+# Logs y temporales
+*.log
+*.swp
+*.swo
+*~
+
+# Nota: lazy-lock.json SI se versiona (reproducibilidad de plugins).
