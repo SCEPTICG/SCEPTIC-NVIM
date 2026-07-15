@@ -53,16 +53,29 @@ jobs:
           mkdir -p "$XDG_CONFIG_HOME" "$XDG_DATA_HOME"
           ln -sfn "$GITHUB_WORKSPACE/nvim" "$XDG_CONFIG_HOME/nvim"
 
-          # 1) Instalar plugins (bloqueante)
-          nvim --headless "+Lazy! sync" +qa
+          # Patron de errores reales de Lua/Neovim. Excluimos el ruido benigno
+          # (progreso de descarga de parsers de Treesitter, etc.).
+          err_re='E[0-9]+:|Error|stack traceback|\.lua:[0-9]+:'
+
+          check() {
+            # $1 = descripcion, resto = comando nvim.
+            local desc="$1"; shift
+            local out
+            out="$("$@" 2>&1 || true)"
+            if printf '%s\n' "$out" | grep -Eq "$err_re"; then
+              echo "ERROR real durante: $desc"
+              printf '%s\n' "$out"
+              exit 1
+            fi
+          }
+
+          # 1) Instalar plugins (bloqueante). Aqui la spec manda: treesitter
+          #    se instala desde la rama "master" al no estar fijado en el lock.
+          check "Lazy sync" nvim --headless "+Lazy! sync" +qa
 
           # 2) Abrir un archivo real para disparar los plugins por evento
-          #    (treesitter, conform, gitsigns...) y fallar si algo imprime error.
+          #    (treesitter, conform, gitsigns...) y cazar errores reales de config.
           printf 'local x = 1\nprint(x)\n' > sample.lua
-          err="$(nvim --headless sample.lua '+qa' 2>&1 || true)"
-          if [ -n "$err" ]; then
-            echo "El arranque de Neovim produjo errores:"
-            echo "$err"
-            exit 1
-          fi
+          check "apertura de sample.lua" nvim --headless sample.lua +qa
+
           echo "La config carga sin errores."
