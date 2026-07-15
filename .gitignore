@@ -9,3 +9,6 @@ Thumbs.db
 *~
 
 # Nota: lazy-lock.json SI se versiona (reproducibilidad de plugins).
+
+# Clon local de la wiki (no forma parte del repo)
+SCEPTIC-NVIM.wiki/

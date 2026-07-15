@@ -1,5 +1,7 @@
 # SCEPTIC-NVIM
 
+[![CI](https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml/badge.svg)](https://github.com/SCEPTICG/SCEPTIC-NVIM/actions/workflows/ci.yml)
+
 A standalone, cross-platform Neovim configuration built on [lazy.nvim](https://github.com/folke/lazy.nvim). The whole config lives under `nvim/`, so you can copy or symlink it straight into your Neovim config directory.
 
 Works the same on Linux, macOS and Windows, and targets Neovim >= 0.11.3.
