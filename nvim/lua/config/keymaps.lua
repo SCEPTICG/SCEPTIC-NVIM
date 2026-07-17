@@ -1,0 +1,11 @@
+-- SCEPTIC-NVIM: keymaps.
+-- Este fichero lo carga LazyVim automaticamente. Se añade a los keymaps por
+-- defecto de LazyVim (que ya remapea j/k a gj/gk, etc.).
+--
+-- Fase 1: vacio a proposito para heredar el comportamiento de fabrica de LazyVim.
+--
+-- Fase 2: aqui (o en un modulo dedicado que se llame desde aqui) vivira la
+-- logica de la preferencia "movement". Por defecto "hjkl" = LazyVim de fabrica.
+-- Cuando sea "jklñ" (teclado ISO español) habra que remapear en modos n/x/o:
+--   j = izquierda, k = arriba, l = abajo, ñ = derecha, y deshabilitar h.
+-- No se implementa todavia.
