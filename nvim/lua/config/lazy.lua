@@ -36,8 +36,12 @@ local spec = {
 -- "coding.copilot"). Con la lista vacia por defecto, esto NO añade nada, asi que
 -- el comportamiento es identico a LazyVim de fabrica.
 -- Fase 2/3: el menu TUI rellenara esta lista; aqui solo la recorremos.
+-- Validamos que cada extra sea una cadena antes de concatenar; asi un JSON
+-- malformado (numeros, tablas...) no rompe el arranque. Con extras=[] no cambia nada.
 for _, extra in ipairs(prefs.extras or {}) do
-  table.insert(spec, { import = "lazyvim.plugins.extras." .. extra })
+  if type(extra) == "string" then
+    table.insert(spec, { import = "lazyvim.plugins.extras." .. extra })
+  end
 end
 
 require("lazy").setup({

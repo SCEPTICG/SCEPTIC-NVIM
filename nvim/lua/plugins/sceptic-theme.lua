@@ -1,26 +1,34 @@
 -- SCEPTIC-NVIM: override del tema segun preferencias.
 --
--- Fija el colorscheme de LazyVim al valor de prefs.theme. Con el default
--- "tokyonight" esto es EXACTAMENTE lo que hace LazyVim de fabrica, asi que
--- no cambia nada (capa inerte en Fase 1).
+-- Fija el colorscheme de LazyVim al valor de prefs.theme, pasandolo antes por
+-- sceptic.theme.resolve() para VALIDARLO: si el tema del JSON no esta en el
+-- catalogo conocido, cae a "tokyonight" y el arranque no se rompe.
 --
--- LazyVim ya incluye tokyonight y catppuccin como dependencias, por lo que esos
--- temas funcionan sin añadir nada.
+-- Ademas declara aqui los plugins de los temas del catalogo que no vienen de
+-- serie con LazyVim. Se declaran como los temas de LazyVim (lazy = true,
+-- priority = 1000): lazy.nvim los instala y los carga cuando se aplica su
+-- colorscheme (tanto al arrancar como con :ScepticTheme en caliente).
 --
--- Fase 2: cuando prefs.theme sea otro tema (p. ej. "gruvbox", "kanagawa"...),
--- aqui habra que:
---   1) Añadir a este spec (o a un modulo aparte) el plugin del tema.
---   2) Mapear, si hace falta, el nombre de la preferencia al nombre real del
---      colorscheme.
--- De momento solo pasamos el valor tal cual.
+-- El comando :ScepticTheme (cambio en caliente + persistencia) se registra
+-- desde config/autocmds.lua llamando a require("sceptic.theme").setup().
 
 local prefs = require("sceptic.prefs")
+local theme = require("sceptic.theme")
 
 return {
+  -- Temas del catalogo:
+  --   * tokyonight ya viene con LazyVim, no hace falta declararlo.
+  --   * catppuccin tambien lo incluye LazyVim; lo declaramos de forma explicita
+  --     por claridad (declarar el mismo repo solo fusiona la spec, es inocuo).
+  { "catppuccin/nvim", name = "catppuccin", lazy = true, priority = 1000 },
+  --   * dracula NO viene de serie: lo añadimos nosotros.
+  { "Mofiqul/dracula.nvim", lazy = true, priority = 1000 },
+
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = prefs.theme,
+      -- resolve() garantiza un nombre valido (fallback a tokyonight).
+      colorscheme = theme.resolve(prefs.theme),
     },
   },
 }
