@@ -1,0 +1,24 @@
+-- SCEPTIC-NVIM: andamiaje del estilo de pestañas segun preferencias.
+--
+-- Fase 1 (INERTE): no cambiamos nada. Devolvemos una spec vacia, asi que
+-- LazyVim conserva su bufferline (pestañas) de fabrica. El valor por defecto de
+-- prefs.tabs_style es "horizontal", que ya es el comportamiento de LazyVim.
+--
+-- Fase 2: aqui vivira la logica que aplique prefs.tabs_style. Segun el valor se
+-- ajustara el plugin de pestañas (p. ej. bufferline.nvim: estilo de separadores,
+-- iconos, o incluso desactivarlas). Ejemplo orientativo para el futuro:
+--
+--   local prefs = require("sceptic.prefs")
+--   return {
+--     {
+--       "akinsho/bufferline.nvim",
+--       opts = {
+--         options = {
+--           -- ...ajustes derivados de prefs.tabs_style...
+--         },
+--       },
+--     },
+--   }
+--
+-- De momento, spec vacia = sin cambios.
+return {}

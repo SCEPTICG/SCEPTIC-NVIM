@@ -1,0 +1,6 @@
+-- SCEPTIC-NVIM: autocomandos.
+-- Este fichero lo carga LazyVim automaticamente. Se añade a los autocmds por
+-- defecto de LazyVim.
+--
+-- Fase 1: vacio a proposito para heredar el comportamiento de fabrica de LazyVim.
+-- Añade aqui tus autocomandos propios en el futuro.
