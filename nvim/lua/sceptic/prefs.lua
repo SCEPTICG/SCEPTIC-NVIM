@@ -1,26 +1,41 @@
--- SCEPTIC-NVIM: modulo lector de preferencias.
+-- SCEPTIC-NVIM: modulo lector (y ahora tambien escritor) de preferencias.
 --
 -- Lee el fichero JSON de preferencias que vive junto a la configuracion
 -- (sceptic-prefs.json en la raiz del directorio de config de Neovim) y expone
--- la tabla resultante fusionando los defaults con lo leido.
+-- los valores resueltos fusionando los defaults con lo leido.
 --
 -- Diseno "a prueba de fallos": si el fichero no existe, no se puede leer o el
 -- JSON esta corrupto, se usan los defaults. El arranque de Neovim NUNCA debe
 -- fallar por culpa de este modulo.
 --
--- IMPORTANTE (Fase 1): los defaults equivalen a LazyVim de fabrica, de modo que
--- con las preferencias por defecto el comportamiento no cambia. La logica que
--- APLICA cada preferencia vive en los ficheros de lua/plugins/ (tema, explorador)
--- y en config/lazy.lua (extras). Este modulo solo se encarga de LEER.
+-- FORMA DEL MODULO (importante, cambio en Fase 2A):
+--   Antes (Fase 1) este modulo hacia `return build()`, es decir, devolvia una
+--   tabla PLANA con los valores. Ahora devuelve una tabla `M` que:
+--     * Sigue exponiendo los valores como campos directos, asi que el uso de
+--       siempre NO cambia:  require("sceptic.prefs").theme  ->  "tokyonight".
+--     * Ademas expone una funcion  M.set(key, value)  que actualiza el valor en
+--       memoria y reescribe sceptic-prefs.json (fallo seguro con pcall). Sirve
+--       para persistir cambios en caliente, p. ej. al elegir tema con
+--       :ScepticTheme.
+--   Como Lua cachea los modulos, todos los ficheros que hacen
+--   require("sceptic.prefs") comparten la MISMA tabla, de modo que un M.set()
+--   tambien queda reflejado en memoria para quien ya la tuviera.
 
 -- Defaults canonicos. Deben coincidir exactamente con sceptic-prefs.json.
+-- Ademas, sus claves definen el conjunto de claves "conocidas": solo estas se
+-- leen del JSON, se pueden escribir con set() y se persisten.
 local defaults = {
   theme = "tokyonight", -- tema por defecto de LazyVim
-  movement = "hjkl", -- movimiento de fabrica (Fase 2: "jklñ" para teclado ISO español)
+  movement = "hjkl", -- movimiento de fabrica ("jklñ" para teclado ISO español)
   explorer_side = "left", -- lado del explorador neo-tree (por defecto en LazyVim)
-  tabs_style = "horizontal", -- estilo de pestañas/bufferline (Fase 2)
+  tabs_style = "horizontal", -- estilo de pestañas/bufferline (Fase 2B)
   extras = {}, -- lista de extras de LazyVim a importar (vacia = ninguno)
 }
+
+-- Ruta del fichero de preferencias, junto a la config de Neovim.
+local function prefs_path()
+  return vim.fn.stdpath("config") .. "/sceptic-prefs.json"
+end
 
 -- Devuelve una copia superficial de los defaults, para no mutar la tabla base.
 local function copy_defaults()
@@ -29,7 +44,7 @@ end
 
 -- Lee y decodifica el fichero de preferencias. Devuelve una tabla o nil.
 local function read_prefs_file()
-  local path = vim.fn.stdpath("config") .. "/sceptic-prefs.json"
+  local path = prefs_path()
 
   -- Comprobamos que el fichero exista y sea legible antes de tocarlo.
   if vim.fn.filereadable(path) ~= 1 then
@@ -75,7 +90,60 @@ local function build()
   return prefs
 end
 
--- La tabla de preferencias ya resuelta. Se calcula una sola vez al requerir el
--- modulo (Lua cachea los modulos), asi que todos los ficheros que la usan ven
--- el mismo resultado.
-return build()
+-- Tabla que devuelve el modulo. Volcamos en ella los valores resueltos (una
+-- sola vez, al requerir el modulo) y le colgamos la funcion set().
+local M = {}
+for key, value in pairs(build()) do
+  M[key] = value
+end
+
+-- set(key, value): actualiza una preferencia en memoria y reescribe el JSON.
+--
+-- Fallo seguro: valida clave y tipo; si algo va mal avisa con vim.notify y
+-- devuelve false SIN romper. Devuelve true si se persistio correctamente.
+function M.set(key, value)
+  -- Solo permitimos claves conocidas (las de defaults).
+  if defaults[key] == nil then
+    vim.notify("SCEPTIC: preferencia desconocida '" .. tostring(key) .. "'", vim.log.levels.WARN)
+    return false
+  end
+
+  -- El tipo del valor debe coincidir con el del default, para no corromper el JSON.
+  if type(value) ~= type(defaults[key]) then
+    vim.notify(
+      "SCEPTIC: tipo invalido para '"
+        .. tostring(key)
+        .. "' (se esperaba "
+        .. type(defaults[key])
+        .. ")",
+      vim.log.levels.WARN
+    )
+    return false
+  end
+
+  -- Actualizamos en memoria.
+  M[key] = value
+
+  -- Reconstruimos SOLO con las claves conocidas (nunca serializamos la funcion set).
+  local data = {}
+  for k in pairs(defaults) do
+    data[k] = M[k]
+  end
+
+  -- Codificamos y escribimos con pcall: cualquier fallo se avisa pero no rompe.
+  local ok_encode, encoded = pcall(vim.json.encode, data)
+  if not ok_encode or type(encoded) ~= "string" then
+    vim.notify("SCEPTIC: no se pudo codificar las preferencias a JSON", vim.log.levels.ERROR)
+    return false
+  end
+
+  local ok_write = pcall(vim.fn.writefile, vim.split(encoded, "\n"), prefs_path())
+  if not ok_write then
+    vim.notify("SCEPTIC: no se pudo escribir sceptic-prefs.json", vim.log.levels.ERROR)
+    return false
+  end
+
+  return true
+end
+
+return M

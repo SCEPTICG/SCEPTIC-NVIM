@@ -8,17 +8,22 @@
 -- Los opts se FUSIONAN con los de LazyVim (no los reemplazan), asi que solo
 -- tocamos window.position y el resto de la config de neo-tree se conserva.
 --
--- Fase 2: validar que explorer_side sea "left" o "right" antes de aplicarlo.
--- De momento pasamos el valor tal cual (el default es seguro).
+-- Validamos que explorer_side sea "left" o "right" antes de aplicarlo; si es
+-- cualquier otra cosa (JSON raro), caemos a "left" para no romper neo-tree.
 
 local prefs = require("sceptic.prefs")
+
+local side = prefs.explorer_side
+if side ~= "left" and side ~= "right" then
+  side = "left"
+end
 
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
     opts = {
       window = {
-        position = prefs.explorer_side,
+        position = side,
       },
     },
   },
